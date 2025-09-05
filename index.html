@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroWorkflow - Your AI Coding Partner</title>
+
+  <!-- FONTS: Inter for UI, JetBrains Mono for Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <!-- ICONS: Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* 
+        ==============================================
+        EVERFOREST DARK PALETTE
+        ==============================================
+        */
+    :root {
+      --bg-color: #2f383e;
+      --bg-alt: #262c30;
+      --fg-color: #d8caac;
+      --comment-color: #859289;
+      --green: #a7c080;
+      --red: #e67e80;
+      --yellow: #dbbc7f;
+      --blue: #7fbbb3;
+      --aqua: #83c092;
+      --border-color: #4a555b;
+    }
+
+    /* 
+        ==============================================
+        BASE SETUP & RESET
+        ==============================================
+        */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--fg-color);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* 
+        ==============================================
+        LAYOUT & UTILITIES
+        ==============================================
+        */
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      padding: 6rem 0;
+    }
+
+    /* 
+        ==============================================
+        TYPOGRAPHY
+        ==============================================
+        */
+    h1,
+    h2,
+    h3 {
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      color: white;
+      letter-spacing: -1.5px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      color: var(--green);
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    h3 {
+      color: var(--yellow);
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--fg-color);
+      max-width: 65ch;
+      /* Optimal reading width */
+    }
+
+    a {
+      color: var(--green);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: white;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 
+        ==============================================
+        HEADER & NAVIGATION
+        ==============================================
+        */
+    .header {
+      padding: 2rem 0;
+      position: sticky;
+      top: 0;
+      background-color: rgba(47, 56, 62, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      margin-right: 15px;
+    }
+
+    .nav-link {
+      font-size: 1rem;
+      background-color: var(--bg-alt);
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      color: var(--fg-color);
+    }
+
+    .nav-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .nav-link i {
+      margin-right: 8px;
+    }
+
+    /* 
+        ==============================================
+        HERO SECTION
+        ==============================================
+        */
+    .hero {
+      padding-top: 4rem;
+      text-align: center;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 1.5rem auto 2.5rem;
+      color: var(--comment-color);
+    }
+
+    .hero-cta {
+      background-color: var(--bg-alt);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      display: inline-block;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 4rem;
+    }
+
+    .hero-cta code {
+      color: var(--fg-color);
+      font-size: 1.1rem;
+    }
+
+    .hero-cta .comment {
+      color: var(--comment-color);
+    }
+
+    /* 
+        ==============================================
+        TERMINAL DEMO
+        ==============================================
+        */
+    .terminal {
+      background-color: var(--bg-alt);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      text-align: left;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 1rem;
+    }
+
+    .terminal-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .dot-red {
+      background: var(--red);
+    }
+
+    .dot-yellow {
+      background: var(--yellow);
+    }
+
+    .dot-green {
+      background: var(--green);
+    }
+
+    .terminal-body {
+      min-height: 220px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .terminal-body .prompt {
+      color: var(--green);
+    }
+
+    .terminal-body .cursor {
+      display: inline-block;
+      background: var(--fg-color);
+      width: 9px;
+      height: 1.2em;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+
+      from,
+      to {
+        background: transparent;
+      }
+
+      50% {
+        background: var(--fg-color);
+      }
+    }
+
+    /* 
+        ==============================================
+        FEATURES SECTION
+        ==============================================
+        */
+    .features {
+      background-color: var(--bg-alt);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--bg-color);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--aqua);
+    }
+
+    .feature-card .icon {
+      font-size: 2rem;
+      color: var(--aqua);
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: var(--comment-color);
+    }
+
+    /* 
+        ==============================================
+        FOOTER
+        ==============================================
+        */
+    .footer {
+      padding: 4rem 0;
+      text-align: center;
+      color: var(--comment-color);
+    }
+
+    .footer a {
+      color: var(--fg-color);
+      font-weight: 500;
+    }
+
+    .footer a:hover {
+      color: var(--green);
+    }
+
+    /* 
+        ==============================================
+        RESPONSIVENESS - Mobile Magic
+        ==============================================
+        */
+    @media (max-width: 768px) {
+      section {
+        padding: 4rem 0;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+
+      .header {
+        padding: 1.5rem 0;
+      }
+
+      .hero {
+        padding-top: 2rem;
+      }
+
+      .hero-cta code {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <img src="https://raw.githubusercontent.com/zeroworkflow/zeroworkflow.github.io/refs/heads/main/light_logo.png"
+          alt="ZeroWorkflow Logo">
+        <span>ZeroWorkflow</span>
+      </div>
+      <a href="https://github.com/zeroworkflow/zw" target="_blank" rel="noopener noreferrer" class="nav-link">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Your workflow, but <span style="color: var(--green);">smarter</span>.</h1>
+        <p class="hero-subtitle">
+          ZeroWorkflow is a blazingly fast, AI-powered CLI that automates the boring parts of your job. Stop wasting
+          time on routine tasks and focus on what matters: coding.
+        </p>
+
+        <div class="hero-cta">
+          <code><span class="comment"># Get started in seconds</span>
+<br>$ brew install zeroworkflow/zw</code>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dot dot-red"></div>
+            <div class="terminal-dot dot-yellow"></div>
+            <div class="terminal-dot dot-green"></div>
+          </div>
+          <div class="terminal-body" id="terminal-body">
+            <span id="typed-output"></span><span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <h2>One Tool to Rule Them All</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="icon"><i class="fas fa-magic"></i></div>
+            <h3>AI Commits</h3>
+            <p>Generate perfect, conventional commit messages from your git diff. Never write a commit message by hand
+              again.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><i class="fas fa-code-branch"></i></div>
+            <h3>Intelligent Review</h3>
+            <p>Get a full AI-powered code review on your changes *before* you even push. Catch bugs and improve style
+              locally.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon"><i class="fas fa-map-signs"></i></div>
+            <h3>Living Roadmap</h3>
+            <p>Automatically update your `ROADMAP.md` file based on your commits. Your documentation will never be out
+              of date again.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        Built with ❤️ and Go by <a href="https://github.com/derxanax" target="_blank"
+          rel="noopener noreferrer">@derxanax</a> and <a href="https://github.com/chunkbyte" target="_blank"
+          rel="noopener noreferrer">@chunkbyte</a>.
+      </p>
+      <p>&copy; 2025 ZeroWorkflow. Licensed under MIT.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const outputElement = document.getElementById('typed-output');
+      const cursorElement = document.querySelector('.cursor');
+      const terminalBody = document.getElementById('terminal-body');
+
+      const lines = [
+        { text: 'zw commit -a -p -r', prompt: true },
+        { text: 'Analyzing changes...', delay: 500, color: 'var(--comment-color)' },
+        { text: '✓ Detected 3 changed files.', color: 'var(--green)' },
+        { text: '✓ Generated commit message: "feat: implement streaming response for AI".', color: 'var(--green)' },
+        { text: '✓ Pushed changes to origin/main.', color: 'var(--green)' },
+        { text: '✓ Updated ROADMAP.md.', color: 'var(--green)' },
+        { text: '✨ Done!', color: 'var(--yellow)', delay: 1000 },
+        { text: '', prompt: true, final: true }
+      ];
+
+      function typeWriter(lineIndex = 0) {
+        if (lineIndex >= lines.length) return;
+
+        const currentLine = lines[lineIndex];
+        const lineWrapper = document.createElement('div');
+
+        if (currentLine.prompt) {
+          const promptSpan = document.createElement('span');
+          promptSpan.className = 'prompt';
+          promptSpan.textContent = '❯ ';
+          lineWrapper.appendChild(promptSpan);
+        }
+
+        if (currentLine.color) {
+          lineWrapper.style.color = currentLine.color;
+        }
+
+        outputElement.appendChild(lineWrapper);
+
+        let charIndex = 0;
+        function typeChar() {
+          if (charIndex < currentLine.text.length) {
+            lineWrapper.textContent += currentLine.text.charAt(charIndex);
+            if (currentLine.prompt && charIndex === 0) {
+              lineWrapper.prepend(lineWrapper.ownerDocument.querySelector('.prompt'));
+            }
+            charIndex++;
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+            setTimeout(typeChar, 30);
+          } else {
+            if (currentLine.final) {
+              const cursorSpan = document.createElement('span');
+              cursorSpan.className = 'prompt';
+              cursorSpan.textContent = '❯ ';
+
+              const finalCursor = document.createElement('span');
+              finalCursor.className = 'cursor';
+
+              const finalLine = document.createElement('div');
+              finalLine.appendChild(cursorSpan);
+              finalLine.appendChild(finalCursor);
+              outputElement.appendChild(finalLine);
+
+            } else {
+              setTimeout(() => typeWriter(lineIndex + 1), currentLine.delay || 200);
+            }
+          }
+        }
+        typeChar();
+      }
+
+      setTimeout(typeWriter, 500);
+    });
+  </script>
+</body>
+
+</html>
